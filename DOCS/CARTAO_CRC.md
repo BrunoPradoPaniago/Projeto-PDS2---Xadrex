@@ -4,17 +4,18 @@
 3- Jogo 
 4- Subclasses (Peao, cavalo, rainha, bispo, torre, rei)
 
-##1-Peça: 
+1-Peça: 
 	Responsabilidades: Saber posiçao, saber se o movimento é valido
 	Colaboradores: tabuleiro
 
-##2-Tabuleiro:
+2-Tabuleiro:
 	Responsabilidades: Matriz 8x8, peças nas posiçoes corretas, movimento, eliminar peças deletadas
 	Colaboradores: peça
-##3-Jogo:
+3-Jogo:
 	Responsabilidades: Controlar as jogadas, receber as jogadas do usuario, condiçoes de fim de jogo(vitoria, derrota, xeque mate)
 	Colaboradores: tabuleiro e peça
-##4-Subclasses:
+4-Subclasses:
+
 	Peao: 
 	Responsabilidade: Validar movimento (1 casa, 2 casas, capturar em diagonal, promoçao de peça)
 	Colaboradores: Tabuleiro 
