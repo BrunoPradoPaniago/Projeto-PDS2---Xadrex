@@ -2,7 +2,7 @@
 #define TABULEIRO_HPP
 
 #include<vector>
-#include<peca.hpp>
+#include "peca.hpp"
 
 using std::vector;
 
@@ -18,9 +18,6 @@ class tabuleiro{
     ~tabuleiro();
 
     vector<vector<peca*>>& getMatriz();
-
-    bool estaEmXeque(int equipe);
-    bool estaEmMate(int equipe);
 
 
 
