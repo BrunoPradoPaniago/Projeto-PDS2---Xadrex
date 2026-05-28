@@ -4,7 +4,7 @@
 #include<vector>
 #include "peca.hpp"
 
-using std::vector;
+
 
 class tabuleiro{
     public:
@@ -17,13 +17,13 @@ class tabuleiro{
     //destrutor de tabuleiro, desaloca a memoria das pecas.
     ~tabuleiro();
 
-    vector<vector<peca*>>& getMatriz();
+    std::vector<std::vector<peca*>>& getMatriz();
 
 
 
     private:
 
-    vector<vector<peca*>> matriz{8, vector<peca*>(8, nullptr)}; //matriz de ponteiros inteiros para classe peça
+    std::vector<std::vector<peca*>> matriz{8, std::vector<peca*>(8, nullptr)}; //matriz de ponteiros inteiros para classe peça
     
     
 };
