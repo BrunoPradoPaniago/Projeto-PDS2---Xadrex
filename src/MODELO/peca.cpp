@@ -1,30 +1,41 @@
-#include "pecas.hpp"
+#include "peca.hpp"
 #include "tabuleiro.hpp"
+#include <cmath>
 
 #include <string>
 
 
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
 using std::string;
 
 
 peca::~peca(){
 
 }
+
+
 int peca::getEquipe(){
     return equipe;
 }
 
+void peca::SetJaMoveu(){
+    jaMoveu = true;
+}
+    
+    
+bool peca::getJaMoveu(){
+    return jaMoveu;
+}
+
+
 
 
 //PEAO
-
-
 peao::peao(int corDaequipe){
     equipe = corDaequipe;
     jaMoveu = false;
 }
+
 
 bool peao::VerificarMovimento(int linha_i, int coluna_i, int linha_f, int coluna_f){
     
@@ -36,45 +47,53 @@ bool peao::VerificarMovimento(int linha_i, int coluna_i, int linha_f, int coluna
     //tem que ser um numero negativo para preto  e postiivo para  branco
     if(equipe == 1 && jaMoveu == false && (linhasAndadas == -1 || linhasAndadas == -2 ) && coluna_i == coluna_f){
         return true;
-    } else if (equipe == 1 && linhasAndadas == -1 && coluna_i == coluna_f){
+    }
+
+    else if (equipe == 1 && linhasAndadas == -1 && coluna_i == coluna_f){
             return true;
-        }
+    }
     
     //movimento de comer, tem que ler linha e coluna andadas (um pra frente e um pro lado)
     else if (equipe == 1 && linhasAndadas == -1 && (colunasAndadas == 1 || colunasAndadas == -1)){
-    return true; }
+    return true; 
+    }
 
 
     //logica para equipe 0 (branco)
     else if(equipe == 0 && jaMoveu == false && (linhasAndadas == 1 || linhasAndadas == 2 ) && coluna_i == coluna_f){
         return true;
-}
-else if (equipe == 0 && linhasAndadas == 1 && coluna_i == coluna_f){
+    }
+    else if (equipe == 0 && linhasAndadas == 1 && coluna_i == coluna_f){
     
             return true;
-} 
+    } 
  
 
- //movimento de comer, tem que ler linha e coluna andadas (um pra frente e um pro lado)
- else if (equipe == 0 && linhasAndadas == 1 && (colunasAndadas == 1 || colunasAndadas == -1)){
-    return true;
- }
- return false;
-  }
+    //movimento de comer, tem que ler linha e coluna andadas (um pra frente e um pro lado)
+    else if (equipe == 0 && linhasAndadas == 1 && (colunasAndadas == 1 || colunasAndadas == -1)){
+        return true;
+    }
+    return false;
+}
+
+std::string peao::getTipoPeca(){
+    return "peao";
+}
 
 
+//BISPO
+//construtor de bispo, da a equipe pra ele e diz que nao foi movido
 
-  //BISPO
-
-  //construtor de bispp, da a equipe pra ele e diz que nao foi movido
 bispo::bispo(int corDaequipe){
     equipe = corDaequipe;
     jaMoveu = false;
-    bool bispo::VerificarMovimento(int linha_i, int coluna_i, int linha_f, int coluna_f){
-        int linhasAndadas = linha_f - linha_i;
+}
+
+bool bispo::VerificarMovimento(int linha_i, int coluna_i, int linha_f, int coluna_f){
+    int linhasAndadas = linha_f - linha_i;
     int colunasAndadas = coluna_f - coluna_i; //esquerda -1 e direirta 1
 
-//garante que os dois sera positivo, vai guardar a distanica percorrida pelo bispo ao inves de so a direçao
+    //garante que os dois sera positivo, vai guardar a distanica percorrida pelo bispo ao inves de so a direçao
     if (linhasAndadas<0){
         linhasAndadas = linhasAndadas *(-1);
     }
@@ -82,64 +101,126 @@ bispo::bispo(int corDaequipe){
         colunasAndadas = colunasAndadas *(-1);
     }
     if (linhasAndadas == colunasAndadas) {
-    return true;  } }
-    return false;  }
+        return true;  
+    } 
+    return false;  
+}
+
+std::string bispo::getTipoPeca(){
+    return "bispo";
+}
 
 
-
-    //REI
+//REI
 //construtor rei
-    rei::rei(int corDaequipe){
-        equipe = corDaequipe;
-        jaMoveu = false;
+rei::rei(int corDaequipe){
+    equipe = corDaequipe;
+    jaMoveu = false;
+}
 
-    }
-
-    bool rei::VerificarMovimento(int linha_i, int coluna_i, int linha_f, int coluna_f){
+bool rei::VerificarMovimento(int linha_i, int coluna_i, int linha_f, int coluna_f){
     int linhasAndadas = linha_f - linha_i;
     int colunasAndadas = coluna_f - coluna_i; 
 
     //cliclou no mesmo lugar que o rei ja tava
     if(linhasAndadas ==0 && colunasAndadas == 0){
-return false;
+        return false;
     }
     if(linhasAndadas < 0){
-        linhasAndadas= linhasAndadas *(-1)
+        linhasAndadas= linhasAndadas *(-1);
     }
     if(colunasAndadas < 0){
-        colunasAndadas= colunasAndadas *(-1) }
+        colunasAndadas= colunasAndadas *(-1); 
+    }
 
     if(linhasAndadas<=1 && colunasAndadas <=1){
         return true;
     }
     return false;
-     }
+}
+
+std::string rei::getTipoPeca(){
+    return "rei";
+}
 
 
-     //TORRE
-     torre::torre(int corDaequipe){
-        equipe= corDaequipe;
-        jaMoveu= false;
-     }
+//TORRE
+torre::torre(int corDaequipe){
+    equipe= corDaequipe;
+    jaMoveu= false;
+}
 
 
-     bool torre::VerificarMovimento(int linha_i, int coluna_i, int linha_f, int coluna_f){
-        int linhasAndadas = linha_f - linha_i;
+bool torre::VerificarMovimento(int linha_i, int coluna_i, int linha_f, int coluna_f){
+    int linhasAndadas = linha_f - linha_i;
     int colunasAndadas = coluna_f - coluna_i; 
 
-     if(linhasAndadas ==0 && colunasAndadas == 0){
-return false;
+    if(linhasAndadas ==0 && colunasAndadas == 0){
+        return false;
     }
     if(linhasAndadas < 0){
-        linhasAndadas= linhasAndadas *(-1)
+        linhasAndadas= linhasAndadas *(-1);
     }
     if(colunasAndadas < 0){
-        colunasAndadas= colunasAndadas *(-1) }
+        colunasAndadas= colunasAndadas *(-1);
+    }
+
+    //vai andar pra frente, pra tras ou pros lados. Como em cima coloquei o modulo, deixar >0 ja funcionma, nao precisa fazer uma funçao para branco ou preto
+    if((linhasAndadas> 0 && colunasAndadas== 0)|| linhasAndadas == 0 && colunasAndadas> 0 ){
+        return true;
+    }
+    return false;
+}
+
+std::string torre::getTipoPeca(){
+    return "torre";
+}
 
 
-        //vai andar pra frente, pra tras ou pros lados. Como em cima coloquei o modulo, deixar >0 ja funcionma, nao precisa fazer uma funçao para branco ou preto
-        if((linhasAndadas> 0 && colunasAndadas== 0)|| linhasAndadas == 0 && colunasAndadas> 0 ){
-            return true;
-        }
+
+
+//CAVALO
+cavalo::cavalo(int corDaequipe){
+    equipe= corDaequipe;
+    jaMoveu= false;
+}
+
+bool cavalo::VerificarMovimento(int linha_i, int coluna_i, int linha_f, int coluna_f){
+    if((std::abs(linha_f - linha_i)==1 && std::abs(coluna_f-coluna_i)==2) ||
+       (std::abs(linha_f - linha_i)==2 && std::abs(coluna_f-coluna_i)==1)){
+        return true;
+    }
+    return false;
+}
+
+std::string cavalo::getTipoPeca(){
+    return "cavalo";
+}
+
+//RAINHA
+rainha::rainha(int corDaequipe){
+    equipe= corDaequipe;
+    jaMoveu= false;
+}
+
+bool rainha::VerificarMovimento(int linha_i, int coluna_i, int linha_f, int coluna_f){
+    int linhasAndadas = std::abs(linha_f - linha_i);
+    int colunasAndadas = std::abs(coluna_f - coluna_i);
+
+    if (linhasAndadas == 0 && colunasAndadas == 0) {
         return false;
-         }
+    }
+
+    if ((linhasAndadas > 0 && colunasAndadas == 0) || 
+        (linhasAndadas == 0 && colunasAndadas > 0) || 
+        (linhasAndadas == colunasAndadas)) {
+        return true;
+    }
+    
+    return false;
+}
+
+
+std::string rainha::getTipoPeca(){
+    return "rainha";
+}

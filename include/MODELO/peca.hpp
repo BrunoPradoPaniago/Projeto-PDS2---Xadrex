@@ -5,7 +5,7 @@
 
 
 
-using std::string;
+
 
 class peca{
     public:
@@ -16,10 +16,12 @@ class peca{
 
     virtual ~peca();
 
+    virtual std::string getTipoPeca()=0;
+
     int getEquipe();
 
     //funcao para mudar o bool jaMoveu
-    void jaMovido();
+    void SetJaMoveu();
     
     
     bool getJaMoveu();
@@ -40,6 +42,8 @@ class peao: public peca{
 
     //Se equipe=branco, so anda pra frente, se equipe=preto, so anda pra tras.
     bool VerificarMovimento(int linha_i, int coluna_i, int linha_f, int coluna_f) override;
+
+    std::string getTipoPeca() override;
 };
 
 
@@ -49,6 +53,8 @@ class bispo: public peca{
 
     //Se |linha_f-linha_i|==|coluna_f-coluna_i| o movimento é valido
     bool VerificarMovimento(int linha_i, int coluna_i, int linha_f, int coluna_f) override;
+
+    std::string getTipoPeca() override;
 };
 
 
@@ -57,6 +63,8 @@ class rei: public peca{
     rei(int equipe);
 
     bool VerificarMovimento(int linha_i, int coluna_i, int linha_f, int coluna_f) override;
+
+    std::string getTipoPeca() override;
 };
 
 class torre: public peca{
@@ -65,6 +73,8 @@ class torre: public peca{
 
     //Se a coluna ou a linha forem fixas, mas não as duas, o movimento é valido.
     bool VerificarMovimento(int linha_i, int coluna_i, int linha_f, int coluna_f) override;
+
+    std::string getTipoPeca() override;
 };
 
 class cavalo: public peca{
@@ -73,6 +83,8 @@ class cavalo: public peca{
 
      //Se |linha_f-linha_i|==2 && |coluna_f-coluna_i|==1, ou o contrario, o movimento é valido.
     bool VerificarMovimento(int linha_i, int coluna_i, int linha_f, int coluna_f) override;
+
+    std::string getTipoPeca() override;
 };
 
 
@@ -81,6 +93,8 @@ class rainha: public peca{
     rainha(int equipe);
 
     bool VerificarMovimento(int linha_i, int coluna_i, int linha_f, int coluna_f) override;
+
+    std::string getTipoPeca() override;
 };
 
 #endif
