@@ -21,15 +21,17 @@ class jogo{
     
     bool ProcessarCoordenadas(std::string movimentoDesejado, int& linha_i, int& linha_f, int& coluna_i, int& coluna_f);
 
+    bool casaAtacada(int linha, int coluna, int equipe)
+
     bool validarMovimentoGeral(int linha_i,int linha_f,int coluna_i,int coluna_f);
 
     bool MoverPeca(int linha_i,int linha_f,int coluna_i,int coluna_f);
 
     bool PromocaoPeao(int linha_f,int coluna_f);
 
-    bool verificarXeque(int numero);
+    bool verificarXeque(int equipe);
 
-    bool verificarMate(int numero);
+    int verificarMate(int equipe);
 
     std::string nomeDaEquipe(std::string pertencimento);
 

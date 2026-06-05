@@ -7,38 +7,179 @@ int turno_bruto;//tirar
 bool jogoAtivo;//tirar
 
 
-bool ProcessarCoordenadas(std::string movimentoDesejado, int& linha_i, int& linha_f, int& coluna_i, int& coluna_f){
+bool jogo::ProcessarCoordenadas(std::string movimentoDesejado, int& linha_i, int& linha_f, int& coluna_i, int& coluna_f){
     return true;//temporario, so pra nao dar erro,TO DO
 }
 
-bool validarMovimentoGeral(int linha_i,int linha_f,int coluna_i,int coluna_f){
+
+bool jogo::validarMovimentoGeral(int linha_i,int linha_f,int coluna_i,int coluna_f){
     return true;//temporario, so pra nao dar erro,TO DO
 }
 
-bool MoverPeca(int linha_i,int linha_f,int coluna_i,int coluna_f){
+bool jogo::casaAtacada(int linha, int coluna, int equipe){
+    for(int i=0; i<8; i++ ){
+        for(int i2=0;i2<8;i2++){
+            if(tab.getMatriz[i][i2]!=nullptr){
+                if(tab.getMatriz()[i][i2]->getEquipe()==equipe){
+                    if(validarMovimentoGeral(i,linha,i2,coluna)){
+                        return true;
+                    }
+                }
+            }
+            
+        }
+    }
+    return false;
+}
+
+bool jogo::MoverPeca(int linha_i,int linha_f,int coluna_i,int coluna_f){
+
+    peca* backupMinhaPeca=tab.getMatriz()[linha_i][coluna_i];
+    int minhaEquipe = tab.getMatriz()[linha_i][coluna_i]->getEquipe();
+
+    peca* backupPecaDestino = tab.getMatriz()[linha_f][coluna_f];
+
+    tab.getMatriz()[linha_f][coluna_f] = backupMinhaPeca;
+    tab.getMatriz()[linha_i][coluna_i] = nullptr;
+
+    if(verificarXeque(minhaEquipe)){
+        tab.getMatriz()[linha_i][coluna_i]=backupMinhaPeca;
+        tab.getMatriz()[linha_f][coluna_f]=backupPecaDestino;
+        return false;
+    }
+    else{
+        if (backupPecaDestino != nullptr) {
+            delete backupPecaDestino; 
+        }
+    }
+
+    return true;
+}
+
+bool jogo::PromocaoPeao(int linha_f,int coluna_f){
     return true;//temporario, so pra nao dar erro,TO DO
 }
 
-bool PromocaoPeao(int linha_f,int coluna_f){
-    return true;//temporario, so pra nao dar erro,TO DO
+bool jogo::verificarXeque(int equipe){
+    int linhaRei=0;
+    int colunaRei=0;
+    for(int i=0;i<8;i++){
+        for(int i2=0; i2<8; i2++){
+            if(tab.getMatriz()[i][i2]!=nullptr){
+                if(tab.getMatriz()[i][i2]->getTipoPeca()=="rei" &&
+                   tab.getMatriz()[i][i2]->getEquipe()==equipe){
+                        linhaRei=i;
+                        colunaRei=i2;
+                   }
+            }
+        }
+    }
+
+    int equipe_adversaria = (equipe+1) % 2;
+    if(casaAtacada(linhaRei,colunaRei,equipe_adversaria)){
+        return true;
+    }
+    return false;
 }
 
-bool verificarXeque(int numero){
-    return true;//temporario, so pra nao dar erro,TO DO
+int jogo::verificarMate(int equipe){
+    //Achar a posicao do rei.
+    int linhaRei=0;
+    int colunaRei=0;
+    for(int i=0;i<8;i++){
+        for(int i2=0; i2<8; i2++){
+            if(tab.getMatriz()[i][i2]!=nullptr){
+                if(tab.getMatriz()[i][i2]->getTipoPeca()=="rei" &&
+                   tab.getMatriz()[i][i2]->getEquipe()==equipe){
+                        linhaRei=i;
+                        colunaRei=i2;
+                   }
+            }
+        }
+    }
+    //Verificar nas 8 casas em volta do rei, se elas não estão sendo atacadas e, nesse caso, se não há ninguém 
+    //naquela casa, ou se tem um inimigo. Nesse caso, o rei tem pra onde fugir, nao eh mate.
+    
+    for(int i = (linhaRei-1);i<=(linhaRei+1);i++){
+        for(int i2 =(colunaRei-1);i2<=(colunaRei+1);i2++){
+            if(i==linhaRei && i2==colunaRei){
+                continue;
+            }
+            if(i>=0 && i<=7 && i2>=0 && i2<=7){
+                
+                if(!casaAtacada(i,i2,(equipe+1)%2)){
+                    if(tab.getMatriz()[i][i2]==nullptr){
+                        return 0;
+                    }
+                    else if(tab.getMatriz()[i][i2]->getEquipe()==(equipe+1)%2){
+                        return 0;
+                    }
+                }
+                
+            }
+        }
+    }
+
+    //Verificar Afogamento
+    
+    if(!casaAtacada(linhaRei,colunaRei,(equipe+1)%2)){
+        bool afogamento=true;
+        for(int i=0; i<8; i++ ){
+            for(int i2=0;i2<8;i2++){
+                if(tab.getMatriz()[i][i2]!=nullptr){
+                    if(tab.getMatriz()[i][i2]->getEquipe()==equipe){
+                        //Verificando se a peca achada tem algum movimento valido
+                        for(int i3=0;i3<8;i3++){
+                            for(int i4=0;i4<8;i4++){
+                                if(validarMovimentoGeral(i,i3,i2,i4)){
+                                    afogamento=false;
+                                }
+                            }
+                        }
+
+                    }
+                }
+                
+            }
+        }
+        if(afogamento){
+            return 2;
+        }
+    }
+
+    else{
+        //Nesse caso o rei esta sendo atacado, o unico jeito de nao ser mate eh se alguem conseguir bloquear.
+        int linhaAgressor, colunaAgressor;
+        for(int i=0;i<8;i++){
+            for(int i2=0; i2<8; i2++){
+                if(tab.getMatriz[i][i2]!=nullptr){
+                    if(tab.getMatriz()[i][i2]->getEquipe()==(equipe+1)%2){
+                        if(validarMovimentoGeral(i,linhaRei,i2,colunaRei)){
+                            linhaAgressor=i;
+                            colunaAgressor=i2;
+                        }
+                    }
+                }
+            }
+        }
+
+
+    }
+    
 }
 
-bool verificarMate(int numero){
-    return true;//temporario, so pra nao dar erro,TO DO
+jogo::jogo(){
+    turno_bruto = 0;
+    jogoAtivo = true;
+} 
+
+
+bool jogo::materialInsuficiente(){
+    return true;//temporario, so pra nao dar erro,TO DO:Implementar
 }
 
-//jogo() Implementar
 
-
-//jogo() Implementar
-
-
-
-std::string nomeDaEquipe(std::string pertencimento){
+std::string jogo::nomeDaEquipe(std::string pertencimento){
     std::string nomes[2]={"Brancas","Pretas"};
     if(pertencimento=="proprio"){
         int indiceProprio = turno_bruto % 2;
@@ -53,7 +194,7 @@ std::string nomeDaEquipe(std::string pertencimento){
     }
 } 
 
-int numeroDaEquipe(std::string pertencimento){
+int jogo::numeroDaEquipe(std::string pertencimento){
     if(pertencimento=="proprio"){
         return turno_bruto % 2;
     }
@@ -67,7 +208,7 @@ int numeroDaEquipe(std::string pertencimento){
 }
 
 
-void inicializarJogo(){
+void jogo::inicializarJogo(){
     jogoAtivo=true;
     turno_bruto=0;
    
@@ -163,17 +304,33 @@ void inicializarJogo(){
             
             
 
+            int estaEmMate = verificarMate(numeroDaEquipe("adversario"));
+            if(estaEmMate==1){
+                std::cout<<"O Rei das peças "<< nomeDaEquipe("adversario")<<" está em Xeque-Mate!. O Jogador das peças "<< nomeDaEquipe("proprio")<<" Ganhou!" << std::endl;
+                jogoAtivo=false;
+                continue;
+            }
+            else if(estaEmMate==2){
+                std::cout<<"Afogamento! O Jogador das peças " << nomeDaEquipe("adversario") << " não possui movimentos legais, mas seu Rei não está em xeque. O jogo terminou em Empate!"<<std::endl;
+                jogoAtivo=false;
+                continue;
+            }
+
+
+
+            if(materialInsuficiente()){
+                std::cout<<"O jogo terminou em Empate, por material insuficiente! Nenhum dos jogadores possui peças suficientes no tabuleiro para forçar um Xeque-Mate."<<std::endl;
+                jogoAtivo=false;
+                continue;
+            }
+
+
             bool estaEmXeque = verificarXeque(numeroDaEquipe("adversario"));
             if(estaEmXeque==1){
                 std::cout<<"O Rei das peças "<< nomeDaEquipe("adversario")<<" está em xeque!"<<std::endl;
             }
 
-            bool estaEmMate = verificarMate(numeroDaEquipe("adversario"));
-            if(estaEmMate==1){
-            std::cout<<"O Rei das peças "<< nomeDaEquipe("adversario")<<" está em Xeque-Mate!. O Jogador das peças "<< nomeDaEquipe("proprio")<<" Ganhou!" << std::endl;
-            jogoAtivo=false;
-            continue;
-            }
+
 
             if(PromocaoPeao(linha_f,coluna_f)){
             v.imprimirTabuleiro(tab);
