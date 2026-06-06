@@ -307,7 +307,75 @@ int jogo::verificarMate(int equipe){
             }
         }
 
-        //TODO: acabar a implementacao da funcao
+        std::string tipoAgressor = tab.getMatriz()[linhaAgressor][colunaAgressor]->getTipoPeca();
+
+        //varrendo tabuleiro procurando pecas aliadas que possam bloquear o ataque.
+        for(int i=0; i<8; i++){
+            for(int i2=0; i2<8; i2++){
+                if (tab.getMatriz()[i][i2] != nullptr && tab.getMatriz()[i][i2]->getEquipe() == equipe){
+                    bool salvou = false;
+
+                    //verificando se a peca achada pode capturar o agressor.
+                    if (validarMovimentoGeral(i, linhaAgressor, i2, colunaAgressor)) {
+                        
+                        //simulacao para ver se o movimento vai deixar o rei em xeque por outro lugar.
+                        peca* minhaPeca = tab.getMatriz()[i][i2];
+                        peca* backup = tab.getMatriz()[linhaAgressor][colunaAgressor];
+                        
+                        tab.getMatriz()[linhaAgressor][colunaAgressor] = minhaPeca;
+                        tab.getMatriz()[i][i2] = nullptr;
+                        if (!verificarXeque(equipe)) salvou = true;
+                        
+                        //desfaz a simulacao de movimento.
+                        tab.getMatriz()[i][i2] = minhaPeca;
+                        tab.getMatriz()[linhaAgressor][colunaAgressor] = backup;
+                        
+                        if (salvou) return 0; 
+                    }
+
+                    //verificando se a peca achada consegue bloquear o caminho do agressor
+                    if (tipoAgressor == "torre" || tipoAgressor == "bispo" || tipoAgressor == "rainha"){
+
+                        int step_l = 0;
+                        if (linhaRei > linhaAgressor) step_l = 1;
+                        else if (linhaRei < linhaAgressor) step_l = -1;
+
+                        int step_c = 0;
+                        if (colunaRei > colunaAgressor) step_c = 1;
+                        else if (colunaRei < colunaAgressor) step_c = -1;
+                        
+                        int l_atual = linhaAgressor + step_l;
+                        int c_atual = colunaAgressor + step_c;
+
+                        while (l_atual != linhaRei || c_atual != colunaRei) {
+                            
+                            if (validarMovimentoGeral(i, l_atual, i2, c_atual)) {
+                                
+                                //simulacao para ver se deixa o rei em xeque
+                                peca* minhaPeca = tab.getMatriz()[i][i2];
+                                peca* backup = tab.getMatriz()[l_atual][c_atual];
+                                
+                                tab.getMatriz()[l_atual][c_atual] = minhaPeca;
+                                tab.getMatriz()[i][i2] = nullptr;
+                                if (!verificarXeque(equipe)) salvou = true;
+                                
+                                //desfazendo a simulacao
+                                tab.getMatriz()[i][i2] = minhaPeca;
+                                tab.getMatriz()[l_atual][c_atual] = backup;
+                                
+                                if (salvou) return 0; 
+                            }
+                            l_atual += step_l;
+                            c_atual += step_c;
+                        }
+
+
+                    }
+
+                }
+
+            }
+        }
 
 
     }
