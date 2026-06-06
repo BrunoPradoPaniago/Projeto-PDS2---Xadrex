@@ -199,7 +199,61 @@ bool jogo::MoverPeca(int linha_i,int linha_f,int coluna_i,int coluna_f){
 }
 
 bool jogo::PromocaoPeao(int linha_f,int coluna_f){
-    return true;//temporario, so pra nao dar erro,TO DO
+    //guardar a casa do ultimo movimento do peao
+    peca*p= tab.getMatriz()[linha_f][coluna_f];
+    //se a ultima casa tiver vazia, retorna falso, pq nao tem nenhuma casa para ser promovida, tipo uma trava de segurnaça
+    if(p==nullptr) return false;
+    if(p->getTipoPeca()== "peao"){
+        int equipePeao = p->getEquipe();
+        //esse if vai testar se os peoes, branco ou preto, chegou na linha final (0 ou 7)
+        if((equipePeao ==0 && linha_f ==0)|| (equipePeao ==1 && linha_f ==7)){
+            std::cout << "Promoção de peão";
+            std::cout << "Escolha a nova peça";
+            std::cout <<"1- Rainha"<< std:endl;
+            std::cout <<"2- Cavalo"<< std:endl;
+            std::cout <<"3- Bispo"<< std:endl;
+            std::cout <<"4- Torre"<< std:endl;
+            int escolhaPeca;
+            //loop para o usuario escolher a opçãp. so para quando escolher
+            while(true){
+                //parte para nao quebrar o codigo, se a pessoa escolher algo invalido, volta para o inicio do loop
+                if(!(std::cin>>escolhaPeca)|| escolhaPeca < 1 || escolhaPeca>4){
+                    std::cout << "Escolha invalida";
+                    std::cin.clear();
+                    std::cin.ignore (std::numeric_limits<std::streamsize>::max(), '\n')
+                    continue;
+
+                }
+                //limpa no caso de escolhas invalidas
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+                break;
+        
+
+            }
+            delete p;
+            if(escolhaPeca==1){
+                tab.getMatriz()[linha_f][coluna_f]= new rainha(equipePeao);
+                std::cout << "Peao promovido"<<std::endl;
+            }
+            else if(escolhaPeca==2){
+                tab.getMatriz()[linha_f][coluna_f]= new cavalo(equipePeao);
+                std::cout << "Peao promovido"<<std::endl;
+
+            }
+            else if(escolhaPeca==3){
+                tab.getMatriz()[linha_f][coluna_f]= new bispo(equipePeao);
+                std::cout << "Peao promovido"<<std::endl;
+        }
+        else if(escolhaPeca==4){
+                tab.getMatriz()[linha_f][coluna_f]= new torre(equipePeao);
+                std::cout << "Peao promovido"<<std::endl;
+
+    }
+    return true;
+    }
+}
+return false;
+}
 }
 
 bool jogo::verificarXeque(int equipe){
