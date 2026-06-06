@@ -23,7 +23,7 @@ class jogo{
 
     bool casaAtacada(int linha, int coluna, int equipe)
 
-    bool validarMovimentoGeral(int linha_i,int linha_f,int coluna_i,int coluna_f);
+    bool validarMovimentoGeral(int linha_i,int linha_f,int coluna_i,int coluna_f, bool apenasFisica = false);
 
     bool MoverPeca(int linha_i,int linha_f,int coluna_i,int coluna_f);
 

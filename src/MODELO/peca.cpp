@@ -37,7 +37,7 @@ peao::peao(int corDaequipe){
 }
 
 
-bool peao::VerificarMovimento(int linha_i, int coluna_i, int linha_f, int coluna_f){
+bool peao::verificarMovimento(int linha_i, int coluna_i, int linha_f, int coluna_f){
     
 
     int linhasAndadas = linha_f - linha_i;
@@ -89,7 +89,7 @@ bispo::bispo(int corDaequipe){
     jaMoveu = false;
 }
 
-bool bispo::VerificarMovimento(int linha_i, int coluna_i, int linha_f, int coluna_f){
+bool bispo::verificarMovimento(int linha_i, int coluna_i, int linha_f, int coluna_f){
     int linhasAndadas = linha_f - linha_i;
     int colunasAndadas = coluna_f - coluna_i; //esquerda -1 e direirta 1
 
@@ -118,7 +118,7 @@ rei::rei(int corDaequipe){
     jaMoveu = false;
 }
 
-bool rei::VerificarMovimento(int linha_i, int coluna_i, int linha_f, int coluna_f){
+bool rei::verificarMovimento(int linha_i, int coluna_i, int linha_f, int coluna_f){
     int linhasAndadas = linha_f - linha_i;
     int colunasAndadas = coluna_f - coluna_i; 
 
@@ -151,7 +151,7 @@ torre::torre(int corDaequipe){
 }
 
 
-bool torre::VerificarMovimento(int linha_i, int coluna_i, int linha_f, int coluna_f){
+bool torre::verificarMovimento(int linha_i, int coluna_i, int linha_f, int coluna_f){
     int linhasAndadas = linha_f - linha_i;
     int colunasAndadas = coluna_f - coluna_i; 
 
@@ -185,7 +185,7 @@ cavalo::cavalo(int corDaequipe){
     jaMoveu= false;
 }
 
-bool cavalo::VerificarMovimento(int linha_i, int coluna_i, int linha_f, int coluna_f){
+bool cavalo::verificarMovimento(int linha_i, int coluna_i, int linha_f, int coluna_f){
     if((std::abs(linha_f - linha_i)==1 && std::abs(coluna_f-coluna_i)==2) ||
        (std::abs(linha_f - linha_i)==2 && std::abs(coluna_f-coluna_i)==1)){
         return true;
@@ -203,7 +203,7 @@ rainha::rainha(int corDaequipe){
     jaMoveu= false;
 }
 
-bool rainha::VerificarMovimento(int linha_i, int coluna_i, int linha_f, int coluna_f){
+bool rainha::verificarMovimento(int linha_i, int coluna_i, int linha_f, int coluna_f){
     int linhasAndadas = std::abs(linha_f - linha_i);
     int colunasAndadas = std::abs(coluna_f - coluna_i);
 
