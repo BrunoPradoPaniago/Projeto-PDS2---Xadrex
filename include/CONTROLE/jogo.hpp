@@ -3,7 +3,7 @@
 
 #include <string>
 #include "tabuleiro.hpp"
-#include "view.hpp"
+#include "interface.hpp"
 
 
 class jogo{
@@ -21,7 +21,7 @@ class jogo{
     
     bool ProcessarCoordenadas(std::string movimentoDesejado, int& linha_i, int& linha_f, int& coluna_i, int& coluna_f);
 
-    bool casaAtacada(int linha, int coluna, int equipe)
+    bool casaAtacada(int linha, int coluna, int equipe);
 
     bool validarMovimentoGeral(int linha_i,int linha_f,int coluna_i,int coluna_f, bool apenasFisica = false);
 
@@ -30,6 +30,8 @@ class jogo{
     bool PromocaoPeao(int linha_f,int coluna_f);
 
     bool verificarXeque(int equipe);
+
+    bool materialInsuficiente();
 
     int verificarMate(int equipe);
 
@@ -40,9 +42,10 @@ class jogo{
    
 
 
-    Tabuleiro tab;
-    view v;
+    tabuleiro tab;
+    interface v;
     int turno_bruto;
+    bool jogoAtivo;
 };
 
 

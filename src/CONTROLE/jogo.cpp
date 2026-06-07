@@ -3,6 +3,7 @@
 #include <string>
 #include "jogo.hpp"
 #include <cmath>
+#include <cctype>
 
 
 
@@ -21,9 +22,9 @@ bool jogo::ProcessarCoordenadas(std::string movimentoDesejado, int& linha_i, int
     }
     //divide os char baseado no que foi digitado
 
-    char char_coluna_i= movimentoDesejado[0];
+    char char_coluna_i= std::tolower(movimentoDesejado[0]);
     char char_linha_i= movimentoDesejado[1];
-    char char_coluna_f = movimentoDesejado[3];
+    char char_coluna_f = std::tolower(movimentoDesejado[3]);
     char char_linha_f= movimentoDesejado[4];
 
     //as colunas tem que ser de A a H e as linhas de 1 a 8
@@ -41,8 +42,8 @@ bool jogo::ProcessarCoordenadas(std::string movimentoDesejado, int& linha_i, int
 
     coluna_f = char_coluna_f - 'a';
     coluna_i = char_coluna_i - 'a';
-    linha_f= char_linha_f -'1';
-    linha_i= char_linha_i - '1';
+    linha_f= 7-(char_linha_f -'1');
+    linha_i= 7-(char_linha_i - '1');
 
     return true;
 }
@@ -244,12 +245,12 @@ bool jogo::PromocaoPeao(int linha_f,int coluna_f){
         int equipePeao = p->getEquipe();
         //esse if vai testar se os peoes, branco ou preto, chegou na linha final (0 ou 7)
         if((equipePeao ==0 && linha_f ==0)|| (equipePeao ==1 && linha_f ==7)){
-            std::cout << "Promoção de peão";
-            std::cout << "Escolha a nova peça";
-            std::cout <<"1- Rainha"<< std:endl;
-            std::cout <<"2- Cavalo"<< std:endl;
-            std::cout <<"3- Bispo"<< std:endl;
-            std::cout <<"4- Torre"<< std:endl;
+            std::cout << "Promoção de peão!\n";
+            std::cout << "Escolha a nova peça:\n";
+            std::cout <<"1- Rainha"<< std::endl;
+            std::cout <<"2- Cavalo"<< std::endl;
+            std::cout <<"3- Bispo"<< std::endl;
+            std::cout <<"4- Torre"<< std::endl;
             int escolhaPeca;
             //loop para o usuario escolher a opçãp. so para quando escolher
             while(true){
@@ -257,7 +258,7 @@ bool jogo::PromocaoPeao(int linha_f,int coluna_f){
                 if(!(std::cin>>escolhaPeca)|| escolhaPeca < 1 || escolhaPeca>4){
                     std::cout << "Escolha invalida";
                     std::cin.clear();
-                    std::cin.ignore (std::numeric_limits<std::streamsize>::max(), '\n')
+                    std::cin.ignore (std::numeric_limits<std::streamsize>::max(), '\n');
                     continue;
 
                 }
@@ -280,18 +281,18 @@ bool jogo::PromocaoPeao(int linha_f,int coluna_f){
             else if(escolhaPeca==3){
                 tab.getMatriz()[linha_f][coluna_f]= new bispo(equipePeao);
                 std::cout << "Peao promovido"<<std::endl;
-        }
-        else if(escolhaPeca==4){
+            }
+            else if(escolhaPeca==4){
                 tab.getMatriz()[linha_f][coluna_f]= new torre(equipePeao);
                 std::cout << "Peao promovido"<<std::endl;
+            }
+            return true;
+        }
+        return false;
+    }
+    return false;
+}
 
-    }
-    return true;
-    }
-}
-return false;
-}
-}
 
 bool jogo::verificarXeque(int equipe){
     int linhaRei=0;
@@ -505,6 +506,10 @@ jogo::jogo(){
     jogoAtivo = true;
 } 
 
+jogo::~jogo() {
+    // Destrutor vazio
+}
+
 
 bool jogo::materialInsuficiente(){
      //rei contra rei
@@ -600,7 +605,9 @@ void jogo::inicializarJogo(){
    
 
     std::cout<< "Bem vindo ao Xadrez Virtual!"<< std::endl << "Por favor decida qual Jogador controlará as peças Brancas, e qual controlará as peças Pretas. O Jogador das peças Brancas começa jogando." << std::endl;
+    v.imprimirTabuleiro(tab);
     while(jogoAtivo!=0){
+        v.imprimirTabuleiro(tab);
         int opcaoEscolhida;
         std::cout << "Jogador das peças "<< nomeDaEquipe("proprio")<<", escolha das opções de Jogada, pelo número:" << std::endl << "1 - Mover Peça" << std::endl << "2 - Propor Empate" << std::endl << "3 - Desistir" << std::endl;
         while(true){
@@ -611,6 +618,7 @@ void jogo::inicializarJogo(){
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             continue; 
         }
+
         if(opcaoEscolhida == 1 || opcaoEscolhida == 2 || opcaoEscolhida == 3){
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             break;
@@ -665,6 +673,11 @@ void jogo::inicializarJogo(){
                 bool coordenadasValidas = ProcessarCoordenadas(movimentoDesejado, linha_i, linha_f, coluna_i, coluna_f);
                 if(coordenadasValidas==false){
                     std::cout<<"Movimento Invalido. Digite outro movimento."<<std::endl;
+                    continue;
+                }
+
+                if(tab.getMatriz()[linha_i][coluna_i] == nullptr || tab.getMatriz()[linha_i][coluna_i]->getEquipe() != numeroDaEquipe("proprio")){
+                    std::cout<<"Movimento Invalido. Essa casa esta vazia ou a peca pertence ao adversario."<<std::endl;
                     continue;
                 }
                 
