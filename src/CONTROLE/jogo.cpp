@@ -394,12 +394,12 @@ bool jogo::materialInsuficiente(){
                 //descobre de qual equipe é a peça
                 int equipePeca = p->getEquipe();
                 std::string tipo = p->getTipoPeca();
-                if(tipo =="peao "||tipo== "torre" || tipo =="rainha"){
+                if(tipo =="peao"||tipo== "torre" || tipo =="rainha"){
                     return false;
                 }
             if (tipo == "bispo"){
                 if(equipePeca==0) 
-                bisposBrancos++
+                bisposBrancos++;
             else bisposPretos++;
 
             }
