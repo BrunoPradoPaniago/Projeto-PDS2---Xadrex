@@ -375,7 +375,61 @@ jogo::jogo(){
 
 
 bool jogo::materialInsuficiente(){
-    return false;//temporario, so pra nao dar erro,TO DO:Implementar
+     //rei contra rei
+     //rei e bispo contra rei 
+     //rei e cavalo contra rei
+     int totalPecas =0;
+     int bisposBrancos=0;
+     int bisposPretos=0;
+     int cavalosPretos=0;
+     int cavalosBrancos=0;
+
+     //percorrer todas as casas do tabuleiro
+     for(int i=0; i<8;i++){
+        for(int i2=0;i2<8;i2++){
+            peca*p=tab.getMatriz()[i][i2];
+            //se a casa nao tiver vazia, tem que analisar qual peca esta na casa
+            if (p!= nullptr){
+                totalPecas++;
+                //descobre de qual equipe é a peça
+                int equipePeca = p->getEquipe();
+                std::string tipo = p->getTipoPeca();
+                if(tipo =="peao "||tipo== "torre" || tipo =="rainha"){
+                    return false;
+                }
+            if (tipo == "bispo"){
+                if(equipePeca==0) 
+                bisposBrancos++
+            else bisposPretos++;
+
+            }
+            if(tipo == "cavalo"){
+                if(equipePeca==0) cavalosBrancos++;
+                else cavalosPretos++;
+            }
+            }
+        }
+     }
+     //se so sobrar duas peças no tabuleiro, sao rei, entao o jogo tem que acabar
+     if(totalPecas == 2){
+        return true;
+     }
+     if(totalPecas == 3){
+        if(bisposBrancos ==1 || bisposPretos ==1){
+            return true;
+        }
+        if(cavalosBrancos == 1 || cavalosPretos==1){
+            return true;
+        }
+    
+     }
+     
+    return false;
+    //basicamente vai percorrer todo o tabuleiro procurando as peças ainda vivas
+    //vai analisar as casas que nao estao vaizas e ver de quem é (preto ou branco)
+    //e analisar qual tipo de peça é. Se nao for bispo ou cavalo, jogo segue normal
+    // se for, entra no contador pra ver quantas dessas peças 
+    //depois é analise de caso, se nao entrar em nenhum desses casos, return falso
 }
 
 
