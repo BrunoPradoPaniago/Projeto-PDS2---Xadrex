@@ -7,7 +7,44 @@
 
 
 bool jogo::ProcessarCoordenadas(std::string movimentoDesejado, int& linha_i, int& linha_f, int& coluna_i, int& coluna_f){
-    return true;//temporario, so pra nao dar erro,TO DO
+    //logica da materia de AOC
+    // tabela ASCII os caracteres tem valores 
+    // 1= 49 
+    //2=50...
+    //precisa fazer  7- (x-1)= 7(51-49)= 7-5=5. E X-a tambem, ex:
+    //e3 ------> e-a=4. 7-(3-1)=5. Coluna 4 e Linha 5
+
+    //padrao do input vai ser xy xy
+
+    if(movimentoDesejado.length()<5){
+        return false;
+    }
+    //divide os char baseado no que foi digitado
+
+    char char_coluna_i= movimentoDesejado[0];
+    char char_linha_i= movimentoDesejado[1];
+    char char_coluna_f = movimentoDesejado[3];
+    char char_linha_f= movimentoDesejado[4];
+
+    //as colunas tem que ser de A a H e as linhas de 1 a 8
+
+    if(char_coluna_i < 'a' || char_coluna_i > 'h'|| char_coluna_f<'a' || char_coluna_f > 'h'){
+        return false;
+    }
+
+    //fazer a mesma coisa para os numeros agora
+    if(char_linha_i < '1' || char_linha_i > '8'|| char_linha_f<'1' || char_linha_f > '8'){
+        return false;
+    }
+
+    //conversao da coluna e da linha 
+
+    coluna_f = char_coluna_f - 'a';
+    coluna_i = char_coluna_i - 'a';
+    linha_f= char_linha_f -'1';
+    linha_i= char_linha_i - '1';
+
+    return true;
 }
 
 
