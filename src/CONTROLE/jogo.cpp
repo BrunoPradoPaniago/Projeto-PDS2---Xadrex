@@ -7,7 +7,44 @@
 
 
 bool jogo::ProcessarCoordenadas(std::string movimentoDesejado, int& linha_i, int& linha_f, int& coluna_i, int& coluna_f){
-    return true;//temporario, so pra nao dar erro,TO DO
+    //logica da materia de AOC
+    // tabela ASCII os caracteres tem valores 
+    // 1= 49 
+    //2=50...
+    //precisa fazer  7- (x-1)= 7(51-49)= 7-5=5. E X-a tambem, ex:
+    //e3 ------> e-a=4. 7-(3-1)=5. Coluna 4 e Linha 5
+
+    //padrao do input vai ser xy xy
+
+    if(movimentoDesejado.length()<5){
+        return false;
+    }
+    //divide os char baseado no que foi digitado
+
+    char char_coluna_i= movimentoDesejado[0];
+    char char_linha_i= movimentoDesejado[1];
+    char char_coluna_f = movimentoDesejado[3];
+    char char_linha_f= movimentoDesejado[4];
+
+    //as colunas tem que ser de A a H e as linhas de 1 a 8
+
+    if(char_coluna_i < 'a' || char_coluna_i > 'h'|| char_coluna_f<'a' || char_coluna_f > 'h'){
+        return false;
+    }
+
+    //fazer a mesma coisa para os numeros agora
+    if(char_linha_i < '1' || char_linha_i > '8'|| char_linha_f<'1' || char_linha_f > '8'){
+        return false;
+    }
+
+    //conversao da coluna e da linha 
+
+    coluna_f = char_coluna_f - 'a';
+    coluna_i = char_coluna_i - 'a';
+    linha_f= char_linha_f -'1';
+    linha_i= char_linha_i - '1';
+
+    return true;
 }
 
 
@@ -199,7 +236,61 @@ bool jogo::MoverPeca(int linha_i,int linha_f,int coluna_i,int coluna_f){
 }
 
 bool jogo::PromocaoPeao(int linha_f,int coluna_f){
-    return true;//temporario, so pra nao dar erro,TO DO
+    //guardar a casa do ultimo movimento do peao
+    peca*p= tab.getMatriz()[linha_f][coluna_f];
+    //se a ultima casa tiver vazia, retorna falso, pq nao tem nenhuma casa para ser promovida, tipo uma trava de segurnaça
+    if(p==nullptr) return false;
+    if(p->getTipoPeca()== "peao"){
+        int equipePeao = p->getEquipe();
+        //esse if vai testar se os peoes, branco ou preto, chegou na linha final (0 ou 7)
+        if((equipePeao ==0 && linha_f ==0)|| (equipePeao ==1 && linha_f ==7)){
+            std::cout << "Promoção de peão";
+            std::cout << "Escolha a nova peça";
+            std::cout <<"1- Rainha"<< std:endl;
+            std::cout <<"2- Cavalo"<< std:endl;
+            std::cout <<"3- Bispo"<< std:endl;
+            std::cout <<"4- Torre"<< std:endl;
+            int escolhaPeca;
+            //loop para o usuario escolher a opçãp. so para quando escolher
+            while(true){
+                //parte para nao quebrar o codigo, se a pessoa escolher algo invalido, volta para o inicio do loop
+                if(!(std::cin>>escolhaPeca)|| escolhaPeca < 1 || escolhaPeca>4){
+                    std::cout << "Escolha invalida";
+                    std::cin.clear();
+                    std::cin.ignore (std::numeric_limits<std::streamsize>::max(), '\n')
+                    continue;
+
+                }
+                //limpa no caso de escolhas invalidas
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+                break;
+        
+
+            }
+            delete p;
+            if(escolhaPeca==1){
+                tab.getMatriz()[linha_f][coluna_f]= new rainha(equipePeao);
+                std::cout << "Peao promovido"<<std::endl;
+            }
+            else if(escolhaPeca==2){
+                tab.getMatriz()[linha_f][coluna_f]= new cavalo(equipePeao);
+                std::cout << "Peao promovido"<<std::endl;
+
+            }
+            else if(escolhaPeca==3){
+                tab.getMatriz()[linha_f][coluna_f]= new bispo(equipePeao);
+                std::cout << "Peao promovido"<<std::endl;
+        }
+        else if(escolhaPeca==4){
+                tab.getMatriz()[linha_f][coluna_f]= new torre(equipePeao);
+                std::cout << "Peao promovido"<<std::endl;
+
+    }
+    return true;
+    }
+}
+return false;
+}
 }
 
 bool jogo::verificarXeque(int equipe){
@@ -416,7 +507,61 @@ jogo::jogo(){
 
 
 bool jogo::materialInsuficiente(){
-    return false;//temporario, so pra nao dar erro,TO DO:Implementar
+     //rei contra rei
+     //rei e bispo contra rei 
+     //rei e cavalo contra rei
+     int totalPecas =0;
+     int bisposBrancos=0;
+     int bisposPretos=0;
+     int cavalosPretos=0;
+     int cavalosBrancos=0;
+
+     //percorrer todas as casas do tabuleiro
+     for(int i=0; i<8;i++){
+        for(int i2=0;i2<8;i2++){
+            peca*p=tab.getMatriz()[i][i2];
+            //se a casa nao tiver vazia, tem que analisar qual peca esta na casa
+            if (p!= nullptr){
+                totalPecas++;
+                //descobre de qual equipe é a peça
+                int equipePeca = p->getEquipe();
+                std::string tipo = p->getTipoPeca();
+                if(tipo =="peao"||tipo== "torre" || tipo =="rainha"){
+                    return false;
+                }
+            if (tipo == "bispo"){
+                if(equipePeca==0) 
+                bisposBrancos++;
+            else bisposPretos++;
+
+            }
+            if(tipo == "cavalo"){
+                if(equipePeca==0) cavalosBrancos++;
+                else cavalosPretos++;
+            }
+            }
+        }
+     }
+     //se so sobrar duas peças no tabuleiro, sao rei, entao o jogo tem que acabar
+     if(totalPecas == 2){
+        return true;
+     }
+     if(totalPecas == 3){
+        if(bisposBrancos ==1 || bisposPretos ==1){
+            return true;
+        }
+        if(cavalosBrancos == 1 || cavalosPretos==1){
+            return true;
+        }
+    
+     }
+     
+    return false;
+    //basicamente vai percorrer todo o tabuleiro procurando as peças ainda vivas
+    //vai analisar as casas que nao estao vaizas e ver de quem é (preto ou branco)
+    //e analisar qual tipo de peça é. Se nao for bispo ou cavalo, jogo segue normal
+    // se for, entra no contador pra ver quantas dessas peças 
+    //depois é analise de caso, se nao entrar em nenhum desses casos, return falso
 }
 
 
