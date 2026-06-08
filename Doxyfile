@@ -1,0 +1,8 @@
+# Doxyfile para o Projeto de Xadrez
+
+PROJECT_NAME           = "Xadrez Virtual"
+OUTPUT_DIRECTORY       = doc
+EXTRACT_ALL            = YES
+INPUT                  = src include main.cpp
+RECURSIVE              = YES
+GENERATE_LATEX = NO
