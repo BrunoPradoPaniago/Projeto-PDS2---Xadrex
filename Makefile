@@ -27,3 +27,6 @@ build/interface.o: src/VIEW/interface.cpp
 
 clean:
 	rm -rf build/*.o xadrez
+
+run: all
+	./xadrez

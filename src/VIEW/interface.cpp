@@ -5,8 +5,11 @@ interface::interface() {
     // janela: 600x600 pixels, redimensionável
     janela.create(sf::VideoMode(600, 600), "Xadrez em C++", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
     
-    // posiciona a janela em (100,100) para não cobrir totalmente o terminal
-    janela.setPosition(sf::Vector2i(100, 100));
+    //Esse trecho garante que a janela seja aberta do lado esquerdo do monitor, com espaço para o terminal, à direita.
+    sf::VideoMode monitor = sf::VideoMode::getDesktopMode();
+    int margemEsquerda = 50; // Deixa 50 pixels de respiro na margem esquerda
+    int centroVertical = (monitor.height - 600) / 2; // Centraliza no eixo Y
+    janela.setPosition(sf::Vector2i(margemEsquerda, centroVertical));
     
     // carrega a fonte, arquivo arial.ttf deve estar na pasta.
     if (!fonte.loadFromFile("arial.ttf")) {
