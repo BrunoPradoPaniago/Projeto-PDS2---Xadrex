@@ -256,7 +256,7 @@ bool jogo::PromocaoPeao(int linha_f,int coluna_f){
             while(true){
                 //parte para nao quebrar o codigo, se a pessoa escolher algo invalido, volta para o inicio do loop
                 if(!(std::cin>>escolhaPeca)|| escolhaPeca < 1 || escolhaPeca>4){
-                    std::cout << "Escolha invalida";
+                    std::cout << "Escolha invalida, escolha de 1 a 4."<<std::endl;
                     std::cin.clear();
                     std::cin.ignore (std::numeric_limits<std::streamsize>::max(), '\n');
                     continue;
