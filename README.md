@@ -13,6 +13,9 @@ Para se compilar o programa, primeiramente deve-se garantir que todas as bibliot
 ## Arquitetura e organização do projeto
 ```text
 O projeto foi feito utilizando o padrão MVC (Model, View, Control), distribuído na seguinte estrutura:
+├── dodcumentos
+	├── cartao_crc.md
+	├── user_stories.md
 ├── img
 ├── include
 	├── CONTROLE
