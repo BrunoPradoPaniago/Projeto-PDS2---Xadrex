@@ -11,7 +11,7 @@ Para se compilar o programa, primeiramente deve-se garantir que todas as bibliot
 
 
 ## Arquitetura e organização do projeto
-
+```text
 O projeto foi feito utilizando o padrão MVC (Model, View, Control), distribuído na seguinte estrutura:
 ├── img
 ├── include
@@ -40,7 +40,7 @@ Makefile
 README.md
 arial.ttf
 main.cpp
-
+```
 
 ## Funcionalidades Implementadas
 
