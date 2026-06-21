@@ -1,0 +1,29 @@
+Relatório de Desenvolvimento - E5
+
+1. User Stories (Requisitos Funcionais)
+  US01 - Inicialização do Sistema: Como jogador, quero que o tabuleiro seja gerado com as peças nas posições corretas para iniciar a partida.
+  US02 - Movimentação e Validação: Como jogador, quero que o sistema valide se o movimento da peça escolhida é legal (ex: Cavalo em 'L', Bispo em diagonais) antes de executá-lo.
+  US03 - Captura e Eliminação: Como jogador, quero que peças adversárias sejam eliminadas e deletadas da memória ao serem capturadas.
+  US04 - Condições de Vitória/Derrota: Como sistema, devo monitorar o estado do Rei para identificar situações de Xeque, Xeque-Mate e encerrar o jogo.
+  US05 - Interface de Usuário: Como jogador, quero inserir comandos para realizar minhas jogadas e receber um feedback visual do estado do tabuleiro.
+
+2. Modelagem CRC
+
+  1. Classe: peca
+    Responsabilidades: Armazenar a posição atual; prover a interface para verificar se um movimento é válido.
+    Colaboradores: tabuleiro.
+  2. Classe: tabuleiro
+    Responsabilidades: Gerenciar a matriz $8 \times 8$; posicionar as peças inicialmente; executar o movimento e deletar peças capturadas.
+    Colaboradores: peca.
+  3. Classe: jogo
+    Responsabilidades: Controlar o fluxo das jogadas; receber inputs do usuário; verificar condições de fim de jogo (Vitória, Derrota, Xeque-Mate).
+    Colaboradores: tabuleiro, peca.
+  4. Subclasses de peca (Peão, Cavalo, Rainha, Bispo, Torre, Rei)
+    Responsabilidades:
+      Peão: Validar movimento de 1 ou 2 casas, captura em diagonal e promoção.
+      Cavalo: Validar movimento em 'L' e habilidade de pular peças.
+      Rainha: Validar movimentos combinados de Torre e Bispo.
+      Bispo: Validar movimentos estritamente em diagonais.
+      Torre: Validar movimentos em linha reta; armazenar estado para o movimento de Roque.
+      Rei: Validar movimento de 1 casa em qualquer direção; armazenar estado para o Roque.
+    Colaboradores: tabuleiro.
